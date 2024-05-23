@@ -39,58 +39,57 @@ public class Main {
     }
 
     static void dua(String[] kata) {
-        ArrayList<Integer> konversi = new ArrayList<Integer>();
-        ArrayList<String> konversialfa = new ArrayList<String>();
-        ArrayList<String> fix = new ArrayList<String>();
         String word = "";
-
-        Map<String, Integer> letter = new HashMap<>();
-
-        Map<String, Integer> sortedByValueAscending = new TreeMap<>(
-                (k1, k2) -> letter.get(k1).compareTo(letter.get(k2))
-        );
+        Map<String, Integer> letter = new TreeMap<>();
+        ArrayList<String> hasil = new ArrayList<String>(letter.size());
 
         for (int f=0;f<=kata.length-1;f++){
-            word = word + kata[f];
+            for (int g=0;g<kata[f].length();g++){
+                word = word + kata[f].charAt(g);
+            }
         }
 
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
             int ascii = (int) c;
             if (ascii != 32){
-                konversi.add(ascii);
-                konversialfa.add(String.valueOf(c));
+                String huruf = String.valueOf(c);
+                if (!letter.containsKey(huruf)) {
+                    letter.put(huruf, +1);
+                }else {
+                    letter.put(huruf, letter.get(huruf)+1);
+                }
             }
         }
 
-        for (int l=0;l<konversi.size();l++){
-            int jml = 0;
-            for (int k = 0; k<konversi.size();k++){
-                if (konversi.get(l).equals(konversi.get(k))){
-                    jml++;
-                }
-            }
-            if (!fix.contains(konversialfa.get(l))) {
-                fix.add(konversialfa.get(l));
-                letter.put(konversialfa.get(l), jml);
+        ArrayList<String> konversialfa = new ArrayList<String>(letter.keySet());
 
-                sortedByValueAscending.putAll(letter);
+        for (int i=0;i< konversialfa.size();i++){
+            hasil.add(konversialfa.get(i));
+                for (int j=0;j<=i;j++){
+                    if (letter.get(konversialfa.get(i))>letter.get(hasil.get(j))){
+                        String tampung = hasil.get(i);
 
-                if (l==letter.size()){
-                    Set<String> keys = letter.keySet();
-                    for (String key : keys) {
-                        System.out.print(key);
+                        for (int k=i;k>j;k--){
+                            hasil.set(k, hasil.get(k-1));
+                        }
+                        hasil.set(j, tampung);
+                        break;
+                    }else {
+                        hasil.set(i, konversialfa.get(i));
                     }
                 }
-            }
         }
-        System.out.println();
+
+        for (int i=0;i< hasil.size();i++){
+            System.out.print(hasil.get(i));
+        }
 
     }
 
     public static void main(String[] args) {
         satu("coding is fun");
-        String[] kata = {"Oke", "One"};
+        String[] kata = {"Pendanaan", "Terproteksi", "Untuk", "Dampak", "Berarti"};
         dua(kata);
     }
 }
